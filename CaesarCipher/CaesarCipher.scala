@@ -1,22 +1,27 @@
-object CaesarCipher extends App{
-  val alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ" //The alphabet we use to encrypt and decrypt
+import io.StdIn._
+object CaeserCipherAssignment extends App{
+  var alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-  print("Enter the Shift : ") //Enter the number of shifts we want to shift it down or up in the alphabet
-  val size=alphabet.size
-  val shift=(scala.io.StdIn.readInt()+size)%size
+  //ENCRYPTION
+  val E=(c:Char,key:Int,a:String)=>a((a.indexOf(c.toUpper)+key)%a.size)
 
-  print("Enter Message : ") //Enter the Text you want to Encrypt or Decrypt
-  val message=scala.io.StdIn.readLine()
+  //DECRYPTION
+  val D=(c:Char,key:Int,a:String)=>a((a.indexOf(c.toUpper)-key)%a.size)
 
-  //Output
-  val outputmsg=message.map((c:Char)=>{
-    val x=alphabet.indexOf(c.toUpper)
-    if(x == -1){ //If c is not found in the alphabet we leave it as it is
-      c
-    }else{ //If c is found we encrypt it
-      alphabet((x+shift)%size) //if (x+shift) exceeds the size of alphabet
-    }
-  })
+  val cipher=(algo:(Char,Int,String)=>Char,s:String,key:Int,a:String)=>
+    s.map(algo(_,key,a))
 
-  print(outputmsg)
+  //Take Input
+  var s=readLine("Enter the Message : ")
+  print("Enter the Shift : ")
+  var key=readInt()
+
+  print("The Encrypted Message : ")
+  val cipherText=cipher(E,s,key,alphabet)
+  println(cipherText)
+
+  print("The Decrypted Message : ")
+  val plainText=cipher(D,cipherText,key,alphabet)
+  println(plainText)
+
 }
